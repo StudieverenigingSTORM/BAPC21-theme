@@ -1,0 +1,10 @@
+name = "BAPC21-theme"
+description = "Theme used for BAPC21"
+homepage = "https://2021.bapc.eu"
+tags = ["website", "starter", "responsive", "Disqus", "blog", "Tachyons"]
+features = ["posts", "shortcodes", "related content", "comments"]
+min_version = "0.30.2"
+
+[author]
+	name = "BAPC Committee"
+	homepage = "https://storm.vu"

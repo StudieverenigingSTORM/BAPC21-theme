@@ -1,0 +1,107 @@
+
+function Socketer() {
+
+    // Root url to connect to
+    let host = "ws://localhost:13337/sub/";
+    var ws = true;
+
+    let conn = false;
+
+    // backoff variables
+    let boPos = 0;
+    let bo = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
+
+    // Current timeout id
+    let cw = -1;
+
+    var ct = null;
+
+    // Callbackmap
+    var cbm = {};
+
+    // Attempt connection
+    dcHandle();
+
+    // Private methods
+    function handleMessage(evt) {
+        if (!conn) {
+            if (evt.data == "w") {
+                conn = true;
+                boPos = 0;
+                console.log("Connected")
+                return;
+            } else  {
+                return;
+            }
+        }
+
+        if (ct == null) {
+            if (cbm[evt.data] != undefined)
+                ct = evt.data;
+            else
+                console.log("Will skip " + evt.data);
+        } else {
+            console.log("About to handle " + ct);
+
+            var d = evt.data;
+            if (cbm[ct] != undefined)
+                for (var k in cbm[ct])
+                    window.setTimeout(cbm[ct][k](d), 0);
+
+            ct = null;
+        }
+    }
+
+    function connect() {
+        if (ws != null)
+            return;
+
+        console.log("Attempt connecting to " + host+token);
+        ws = new WebSocket(host + token);
+
+        ws.onmessage = handleMessage;
+        ws.onclose = dcHandle;
+        ws.onerror = dcHandle;
+
+        // Reset timeout waiter id
+        ws.onopen = function() { cw = -1; }
+    }
+
+    function dcHandle() {
+        if (ws == null)
+            return;
+
+        conn = false;
+        ws = null;
+
+        // Attempt to reconnect, after backoff
+        var lbo = bo[Math.min(boPos++, bo.length - 1)];
+        console.log("Attempting reconnect in", lbo, "seconds");
+        cw = window.setTimeout(connect, lbo * 1000);
+    }
+
+    // Public methods
+    this.forceReconnect = function () {
+        if (cw < 0)
+            return;
+
+        window.clearTimeout(this.cw);
+        window.setTimeout(connect, 1);
+    };
+
+    this.subscribe = function (subj, cb) {
+        // Ensure the map of ids exist
+        if (cbm[subj] == undefined)
+            cbm[subj] = {};
+
+        // Generate unique identifier
+        var key = new Date().getTime();
+
+        cbm[subj][key] = cb;
+        return key;
+    };
+
+    this.unsubscribe = function (subj, id) {
+        delete cbm[subj][id]
+    };
+}
