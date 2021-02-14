@@ -1,0 +1,28 @@
+name: Render site
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  public:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: StudieverenigingSTORM/BAPC21-site
+          ref: main
+      - name: Checkout the newish theme
+        run: cd themes; rm -rf ./*; mkdir BAPC21-theme
+      - uses: actions/checkout@v2
+        with:
+          path: themes/BAPC21-theme
+      - name: Install gohugo
+        run: sudo apt install hugo
+      - name: Generate the new look
+        run: hugo -D
+      - uses: actions/upload-artifact@v2
+        with:
+          name: public
+          path: public

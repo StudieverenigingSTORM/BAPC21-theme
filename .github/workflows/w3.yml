@@ -1,0 +1,81 @@
+name: Web standards
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  wcag:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: StudieverenigingSTORM/BAPC21-site
+          ref: main
+      - name: Checkout the newish theme
+        run: cd themes; rm -rf ./*; mkdir BAPC21-theme
+      - uses: actions/checkout@v2
+        with:
+          path: themes/BAPC21-theme
+      - name: Install gohugo
+        run: sudo apt install hugo
+      - name: Generate the new look
+        run: hugo -D
+      - uses: actions/upload-artifact@v2
+      - name: Install pa11y
+        run: npm install pa11y
+      - name: Check WCAG
+        run: node_modules/.bin/pa11y -s WCAG2AAA ./public
+  vnu:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: StudieverenigingSTORM/BAPC21-site
+          ref: main
+      - name: Checkout the newish theme
+        run: cd themes; rm -rf ./*; mkdir BAPC21-theme
+      - uses: actions/checkout@v2
+        with:
+          path: themes/BAPC21-theme
+      - name: Install gohugo
+        run: sudo apt install hugo
+      - name: Generate the new look
+        run: hugo -D
+      - name: Install VNU
+        run: npm install vnu-jar
+      - name: Check W3/HTML
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-html --format json public 2>&1 | python3 -m json.tool
+      - name: Check W3/CSS
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-css --format json public 2>&1| python3 -m json.tool
+      - name: Check W3/SVG
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-svg --format json public 2>&1| python3 -m json.tool
+      - name: Fail W3/HTML
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-html public
+      - name: Fail W3/CSS
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-css public
+      - name: Fail W3/SVG
+        run: java -jar node_modules/vnu-jar/build/dist/vnu.jar --skip-non-svg public
+  webhint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: StudieverenigingSTORM/BAPC21-site
+          ref: main
+      - name: Checkout the newish theme
+        run: cd themes; rm -rf ./*; mkdir BAPC21-theme
+      - uses: actions/checkout@v2
+        with:
+          path: themes/BAPC21-theme
+      - name: Install gohugo
+        run: sudo apt install hugo
+      - name: Generate the new look
+        run: hugo -D
+      - name: Install Webhint
+        run: npm install hint
+      - name: Test install
+        run: find node_modules -name hint
+      - name: Check Hints
+        run: node_modules/.bin/hint public
