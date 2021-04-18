@@ -29,10 +29,11 @@ pre {
     outline: 1px solid white;
 }
 
-#header h1, h3 {
+#header h1, span {
 	font-family: 'Cutive Mono', serif;
 	font-weight: bold;
     text-align: center;
+    display: block;
 }
 
 #header img {
@@ -106,6 +107,10 @@ th {
 
 #content {
     padding: 15px;
+}
+
+#content a {
+    color: #0056b3;
 }
 
 #sponsors .spacing {
