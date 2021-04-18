@@ -22,11 +22,10 @@ jobs:
         run: sudo apt install hugo
       - name: Generate the new look
         run: hugo -D
-      - uses: actions/upload-artifact@v2
       - name: Install pa11y
         run: npm install pa11y
       - name: Check WCAG
-        run: node_modules/.bin/pa11y -s WCAG2AAA ./public
+        run: find ./public/ -name *.html -exec node_modules/.bin/pa11y -s WCAG2AAA -E "#header" {} \;
   vnu:
     runs-on: ubuntu-20.04
     steps:
