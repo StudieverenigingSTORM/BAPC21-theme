@@ -8,7 +8,7 @@ pre {
 
 #header {
     height: 300px;
-    background: rgba(0,0,0,1.0) url("/img/header.jpg") no-repeat center;
+    background: rgba(0,0,0,1.0) url("img/header.jpg") no-repeat center;
     /*opacity: 0.4;*/
     background-size: cover;
     /* Add outline to text to make it more readable */
