@@ -9,6 +9,19 @@ pre {
 h1, h2, h3, h4, h5, h6, h6 {
     margin-top: 1em;
 }
+.sponsor {
+    text-align: center
+}
+
+.platinum img {
+    height: 300px;
+}
+.gold img {
+    height: 188px;
+}
+.silver img {
+    height: 75px;
+}
 
 img {
     margin: 5px;
