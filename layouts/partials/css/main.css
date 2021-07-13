@@ -6,6 +6,10 @@ pre {
     font-family: monospace;
 }
 
+h1, h2, h3, h4, h5, h6, h6 {
+    margin-top: 1em;
+}
+
 #header {
     height: 300px;
     background: rgba(0,0,0,1.0) url("/img/header.jpg") no-repeat center;
