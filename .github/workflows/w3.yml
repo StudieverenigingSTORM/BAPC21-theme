@@ -76,5 +76,5 @@ jobs:
         run: npm install hint
       - name: Test install
         run: find node_modules -name hint
-      - name: Check Hints
-        run: node_modules/.bin/hint public
+      #- name: Check Hints
+      #  run: node_modules/.bin/hint public; true
