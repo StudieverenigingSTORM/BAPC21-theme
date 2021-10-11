@@ -9,6 +9,11 @@ pre {
 h1, h2, h3, h4, h5, h6, h6 {
     margin-top: 1em;
 }
+.empty-head {
+    margin-top: 2em;
+    line-height: 1.2;
+    margin-bottom: .5rem;
+}
 .sponsor {
     text-align: center
 }
@@ -17,7 +22,7 @@ h1, h2, h3, h4, h5, h6, h6 {
     height: 300px;
 }
 .gold img {
-    height: 188px;
+    height: 300px;
 }
 .silver img {
     height: 75px;
